@@ -140,6 +140,25 @@ namespace SEP2.Controllers
             try
             {
                 // TODO: Add delete logic here
+                PhoneBookDbEntities db = new PhoneBookDbEntities();
+
+                var contacts = db.Contacts.Where(x => x.PersonId == id);
+                foreach (var i in contacts)
+                {
+                    Contact c = new Contact()
+                    {
+                        ContactId = i.ContactId
+                    };
+                    db.Entry(c).State = System.Data.Entity.EntityState.Deleted;
+                }
+                db.SaveChanges();
+                //var person = db.Person.Where(x => x.PersonId == id).First();
+                Person p = new Person()
+                {
+                    PersonId = id
+                };
+                db.Entry(p).State = System.Data.Entity.EntityState.Deleted;
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
